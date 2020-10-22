@@ -21,15 +21,21 @@ public class HumanouidSensingGenerate : MonoBehaviour
 
     foreach(HumanBodyBones bone in Enum.GetValues(typeof(HumanBodyBones)))
     {
-      Transform t = Animator.GetBoneTransform(bone);
+      AppendSphere(bone);
+    }
+  }
 
-      if (t)
-      {
-
-
-      }
+  public void AppendSphere(HumanBodyBones bone)
+  {
+    Transform t = Animator.GetBoneTransform(bone);
+    if (t)
+    {
+      SphereCollider sphere= t.gameObject.AddComponent<SphereCollider>();
+      sphere.isTrigger = true;
+      sphere.radius = 0.1f;
 
     }
+
   }
 
   
