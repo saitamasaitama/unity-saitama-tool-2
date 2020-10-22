@@ -42,6 +42,11 @@ public class MenuExtendsEditor:Editor
 
   }
 
+
+#if UNITY_EDITOR
+
+
+#if UNITY_STANDALONE_WIN
   [MenuItem("Assets/Open Git Bash", priority = 2, validate = false)]
   public static void BashOpenMenu()
   {
@@ -56,6 +61,39 @@ public class MenuExtendsEditor:Editor
     Process.Start(procInfo);
     //C:\Windows\System32\cmd.exe / c "set HOME=D:\GitSettings&"C:\Program Files\Git\bin\sh.exe" --login -i
   }
+#endif
+
+#if UNITY_STANDALONE_OSX
+
+  [MenuItem("Assets/Open Terminal", priority = 3, validate = false)]
+  public static void BashOpenMenu()
+  {
+    string selectedPath = AssetDatabase.GetAssetPath(Selection.activeObject);
+    
+    
+    string dir = Path.GetFullPath(
+      Directory.Exists(selectedPath)?selectedPath:Path.GetDirectoryName(selectedPath)
+    );
+    
+    var procInfo = new ProcessStartInfo();
+    UnityEngine.Debug.Log($"open {dir} -a Terminal");
+    //Process.Start($"open {dir} -a Terminal");
+
+    
+    procInfo.UseShellExecute = true;
+    procInfo.FileName = $"open";        
+    procInfo.Arguments = $"{dir} -a Terminal";
+
+    Process.Start(procInfo);
+    
+  }
+
+#endif
+
+
+
+
+#endif
 
   private struct CSSource
   {

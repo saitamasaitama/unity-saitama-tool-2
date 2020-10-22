@@ -17,7 +17,7 @@ public class HumanouidSensingGenerate : MonoBehaviour
     //まずRigidbodyを制御
     Rigidbody.isKinematic = true;
     //
-    Rigidbody.gameObject
+    //Rigidbody.gameObject
 
     foreach(HumanBodyBones bone in Enum.GetValues(typeof(HumanBodyBones)))
     {
