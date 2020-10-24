@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 
 [CustomEditor(typeof(MenuExtends))]
-public class MenuExtendsEditor:Editor
+public class MenuExtendsEditor : Editor
 {
   [MenuItem("Assets/Create/C# Editor Script", priority = 41, validate = false)]
   public static void CreateEditorScript()
@@ -69,23 +69,23 @@ public class MenuExtendsEditor:Editor
   public static void BashOpenMenu()
   {
     string selectedPath = AssetDatabase.GetAssetPath(Selection.activeObject);
-    
-    
+
+
     string dir = Path.GetFullPath(
-      Directory.Exists(selectedPath)?selectedPath:Path.GetDirectoryName(selectedPath)
+      Directory.Exists(selectedPath) ? selectedPath : Path.GetDirectoryName(selectedPath)
     );
-    
+
     var procInfo = new ProcessStartInfo();
-    UnityEngine.Debug.Log($"open {dir} -a Terminal");
+    UnityEngine.Debug.Log($"open '{dir}' -a Terminal");
     //Process.Start($"open {dir} -a Terminal");
 
-    
+
     procInfo.UseShellExecute = true;
-    procInfo.FileName = $"open";        
+    procInfo.FileName = $"open";
     procInfo.Arguments = $"{dir} -a Terminal";
 
-    Process.Start(procInfo);
-    
+    Process p = Process.Start(procInfo);
+    UnityEngine.Debug.Log($"open {p}");
   }
 
 #endif
@@ -116,11 +116,12 @@ public class {this.className}Editor:Editor
 
     {this.className} target = this.target as {this.className};
     base.OnInspectorGUI();
-
+    if (GUILayout.Button(""Button\""))
+    {{
+      //code
+    }}
     
-  }}
-
-  
+  }}  
 }}
 ";
   }
