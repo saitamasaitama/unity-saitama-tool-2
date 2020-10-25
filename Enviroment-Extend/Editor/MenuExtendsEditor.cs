@@ -10,7 +10,18 @@ using System.Diagnostics;
 [CustomEditor(typeof(MenuExtends))]
 public class MenuExtendsEditor : Editor
 {
-  [MenuItem("Assets/Create/C# Editor Script", priority = 41, validate = false)]
+    [MenuItem("GameObject/NodeInfo", false, 0)]
+    public static void Foo()
+    {
+        var gameObject = Selection.activeGameObject;
+
+
+        UnityEngine.Debug.Log($@"
+            CHILD={gameObject.transform.GetComponentsInChildren<Transform>().Length}
+            ");
+        }
+
+    [MenuItem("Assets/Create/C# Editor Script", priority = 41, validate = false)]
   public static void CreateEditorScript()
   {
     /**
