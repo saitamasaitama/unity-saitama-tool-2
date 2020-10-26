@@ -21,9 +21,6 @@ public class MeshSelector : MonoBehaviour
     void Update()
     {
         Mesh m = SkinnedMeshRenderer.sharedMesh;
-        
-
-
         Debug.Log($"Bone-Count={SkinnedMeshRenderer.bones.Length} BONE-Size={m.boneWeights.Length} V-size={m.vertices.Length}");
         Debug.Log($"POSES-Size={m.bindposes.Length}　HumanoidBoneSize={Enum.GetValues(typeof(HumanBodyBones)).Length}　");
 

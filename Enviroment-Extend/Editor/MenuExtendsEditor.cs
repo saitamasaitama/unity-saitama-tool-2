@@ -127,7 +127,7 @@ public class {this.className}Editor:Editor
 
     {this.className} target = this.target as {this.className};
     base.OnInspectorGUI();
-    if (GUILayout.Button(""Button\""))
+    if (GUILayout.Button(""Button""))
     {{
       //code
     }}
