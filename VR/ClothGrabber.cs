@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[RequireComponent(typeof(SkinmeshRenderer))]
+[RequireComponent(typeof(SkinnedMeshRenderer))]
 public class ClothGrabber : MonoBehaviour
 {
 //掴みアクションが発生した場合にラグドールにスキンメッシュを移管する
