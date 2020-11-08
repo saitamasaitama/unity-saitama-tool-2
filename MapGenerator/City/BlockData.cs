@@ -16,4 +16,16 @@ public class BlockData : MonoBehaviour
   //地下部高さ
   public float BuildingUnderGroundHeight;
 
+  public void OnDrawGizmosSelected()
+  {
+    Gizmos.color = Color.magenta*0.5f;
+    Gizmos.DrawCube(
+      data.Center.toVector3()
+      + Vector3.up * 5f,
+      new Vector3(
+        data.Width,
+        10,
+        data.Height)
+        );        
+  }
 }

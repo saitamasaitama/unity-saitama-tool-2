@@ -24,7 +24,9 @@ public abstract class GenericCreator<PARAM,DATA> : MonoBehaviour
   where DATA:MonoBehaviour
   where PARAM:GenericParameters
 {
-  public DATA GeneratedCity=null;
+
+
+  public DATA data=null;
   public PARAM param;
 
   public abstract IMapGenerator<DATA> getGenerator(PARAM param);
@@ -34,15 +36,15 @@ public abstract class GenericCreator<PARAM,DATA> : MonoBehaviour
     GameObject o = this.gameObject;
     IMapGenerator<DATA> generator = getGenerator(param);
     //古いデータは削除
-    if (GeneratedCity != null)
+    if (data != null)
     {
-      for(int i = GeneratedCity.transform.childCount; 0 < i; i--)
+      for(int i = data.transform.childCount; 0 < i; i--)
       {
-        DestroyImmediate(GeneratedCity.transform.GetChild(i - 1).gameObject);
+        DestroyImmediate(data.transform.GetChild(i - 1).gameObject);
       }
-      DestroyImmediate(GeneratedCity);
+      DestroyImmediate(data);
     }
-    GeneratedCity = generator.Generate(o);
+    data = generator.Generate(o);
     //都市を作ったので順次ブロックを生成
     return o;
   }

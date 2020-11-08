@@ -225,11 +225,15 @@ public class CityGenerator : GenericGenerator<CityGeneratorParam,CityData>
     map.Reculculate();
 
     //ブロックを生成する
-    foreach(Block b in map.Blocks)
+    foreach(Block block in map.Blocks)
     {
-      GameObject block= new GameObject($"Block");
-      block.transform.SetParent(o.transform);
-//      block.AddComponent<BlockGenerator>();
+      GameObject blockObj= new GameObject($"Block");
+      BlockData data=blockObj.AddComponent<BlockData>();
+      data.data=block;
+      blockObj.transform.SetParent(o.transform);
+      blockObj.transform.position = o.transform.position + block.Center.toVector3();
+      BlockCreator creator= blockObj.AddComponent<BlockCreator>();
+      creator.data = data;
     }
 
     return map;

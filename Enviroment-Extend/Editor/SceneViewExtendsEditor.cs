@@ -17,11 +17,14 @@ public abstract class SceneViewExtendsEditor
 
   static SceneViewExtendsEditor()
   {
+    Handles.BeginGUI();
     foreach(var e in SceneViewEditors)
     {
       SceneView.duringSceneGui += e.OnGUI;
     }
+    Handles.EndGUI();
   }
+
 
   protected abstract void OnGUI(SceneView scene);
 

@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using MapGen.City;
 
-
+/*
+ * 非MonoBehaviourにできるはず 
+ */
 public class CityData : MonoBehaviour
 {
   public List<Line> Avenues;
@@ -22,8 +24,7 @@ public class CityData : MonoBehaviour
     CrossPoints = crossPoints;
 
     Blocks = culcurateBlocks(crossPoints);
-
-    //ビルを立てていく
+ 
   }
 
   private CrossPoints culculateCrossPoints()
@@ -98,19 +99,6 @@ public class CityData : MonoBehaviour
     foreach (CrossPoint p in CrossPoints)
     {
       Gizmos.DrawSphere(new Vector3(p.Point.x, 0, p.Point.y), 1);
-    }
-
-    Gizmos.color = Color.cyan * 0.5f;
-    foreach (Block b in Blocks)
-    {
-      Gizmos.DrawCube(
-        b.Center.toVector3()
-        + Vector3.up * 5f,
-        new Vector3(
-          b.Width - 0.5f,
-          10,
-          b.Height - 0.5f)
-          );
     }
 
   }
