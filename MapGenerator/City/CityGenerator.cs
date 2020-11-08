@@ -8,29 +8,37 @@ using Random = UnityEngine.Random;
 
 
 [Serializable]
-public class CityMapGeneratorParam
+public class CityGeneratorParam:GenericParameters
 {
-  public int count = 100;
+  public int RoadCount = 100;
   public float Width = 1000f;
   public float Height = 4000f;
   public float minLengthX = 10f;
   public float minLengthY = 10f;
-  public float minStreetWidth = 10f;
-  public float minStreetHeight = 10f;
+
+  public float StreetLineWidth = 1f;
+  public float AvenueLineWidth = 1.5f;
+
+  public float minStreetBlockWidth = 10f;
+  public float minStreetBlockHeight = 10f;
 }
 
-public class CityMapGenerator : IMapGenerator<MapData>
+/// <summary>
+/// City map generator.
+/// </summary>
+public class CityGenerator : GenericGenerator<CityGeneratorParam,CityData>
+//IMapGenerator<CityData>
 {
 
-  private CityMapGeneratorParam param;
+  //private CityMapGeneratorParam param;
   private Graph<Line> lines = new Graph<Line>();
   private List<Line> avenues = new List<Line>();
   private List<Line> streets = new List<Line>();
 
 
-  public CityMapGenerator(CityMapGeneratorParam param)
+  public CityGenerator(CityGeneratorParam param):base(param)
   {
-    this.param = param;
+  
   }
 
 
@@ -53,14 +61,14 @@ public class CityMapGenerator : IMapGenerator<MapData>
     //とりあえず頭に0サイズを追加
     XsortAvenue.Insert(0,
       Line.From(
-      Point2F.From(-param.minStreetWidth, 0),
-      Point2F.From(-param.minStreetWidth, param.Height)
+      Point2F.From(-param.minStreetBlockWidth, 0),
+      Point2F.From(-param.minStreetBlockWidth, param.Height)
       ));
     //末尾に最大サイズを追加
     XsortAvenue.Add(
       Line.From(
-      Point2F.From(param.Width+param.minStreetWidth, 0),
-      Point2F.From(param.Width+param.minStreetWidth, param.Height)
+      Point2F.From(param.Width+param.minStreetBlockWidth, 0),
+      Point2F.From(param.Width+param.minStreetBlockWidth, param.Height)
       ));
 
 
@@ -80,7 +88,7 @@ public class CityMapGenerator : IMapGenerator<MapData>
     //最低幅に満たないlineは削除　＆　１本に絞る
     List<(Line, float)> draftLines =
       WidthIndexedAvenues
-        .Where(v => (param.minStreetWidth * 2) < v.Item2)
+        .Where(v => (param.minStreetBlockWidth * 2) < v.Item2)
         .ToList();
 
     //引けそうもない場合、
@@ -90,8 +98,8 @@ public class CityMapGenerator : IMapGenerator<MapData>
     }
     (Line, float) draftLine = draftLines.OrderBy(v => Random.value).First();//ランダム.First(); 
 
-    var start = draftLine.Item1.from.x + param.minStreetWidth;
-    var end = start + draftLine.Item2 - (param.minStreetWidth * 2);
+    var start = draftLine.Item1.from.x + param.minStreetBlockWidth;
+    var end = start + draftLine.Item2 - (param.minStreetBlockWidth * 2);
     //とりあえず基準線を引く
     var x = Random.Range(start, end);
 
@@ -121,14 +129,14 @@ public class CityMapGenerator : IMapGenerator<MapData>
     //とりあえず頭に0サイズを追加
     YSortStreets.Insert(0,
       Line.From(
-      Point2F.From(0, -param.minStreetHeight),
-      Point2F.From(param.Width,-param.minStreetHeight)
+      Point2F.From(0, -param.minStreetBlockHeight),
+      Point2F.From(param.Width,-param.minStreetBlockHeight)
       ));
     //末尾に最大サイズを追加
     YSortStreets.Add(
       Line.From(
-      Point2F.From(0, param.Height+param.minStreetHeight),
-      Point2F.From(param.Width, param.Height+param.minStreetHeight)
+      Point2F.From(0, param.Height+param.minStreetBlockHeight),
+      Point2F.From(param.Width, param.Height+param.minStreetBlockHeight)
       ));
 
 
@@ -148,7 +156,7 @@ public class CityMapGenerator : IMapGenerator<MapData>
     //最低幅に満たないlineは削除　＆　１本に絞る
     List<(Line, float)> draftLines =
       WidthIndexedStreets
-        .Where(v => (param.minStreetHeight * 2) < v.Item2)
+        .Where(v => (param.minStreetBlockHeight * 2) < v.Item2)
         .ToList();
 
     //引けそうもない場合、null
@@ -160,8 +168,8 @@ public class CityMapGenerator : IMapGenerator<MapData>
     (Line, float) draftLine = draftLines.OrderBy(v => Random.value).First();
 
 
-    var start = draftLine.Item1.from.y + param.minStreetHeight;
-    var end = start + draftLine.Item2 - (param.minStreetHeight * 2);
+    var start = draftLine.Item1.from.y + param.minStreetBlockHeight;
+    var end = start + draftLine.Item2 - (param.minStreetBlockHeight * 2);
     //とりあえず基準線を引く
     var y = Random.Range(start, end);
 
@@ -173,7 +181,13 @@ public class CityMapGenerator : IMapGenerator<MapData>
   }
 
 
-  MapData IMapGenerator<MapData>.Generate(GameObject o)
+
+  /// <summary>
+  /// まず都市を作り上げる
+  /// </summary>
+  /// <returns>The ap generator< city data>. generate.</returns>
+  /// <param name="o">O.</param>
+  public override CityData Generate(GameObject o)
   {
     //面を追加
     GameObject plane= GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -185,7 +199,7 @@ public class CityMapGenerator : IMapGenerator<MapData>
 
     //マンハッタン式（道路は必ず直線）で直交する
 
-    for (int i = 0; i < param.count; i++)
+    for (int i = 0; i < param.RoadCount; i++)
     {
       if (Random.Range(0f, 1f) < 0.5)
       {
@@ -205,11 +219,20 @@ public class CityMapGenerator : IMapGenerator<MapData>
       }
     }
 
-    MapData map = o.AddComponent<MapData>();
+    CityData map = o.AddComponent<CityData>();
     map.Avenues = avenues;
     map.Streets = streets;
     map.Reculculate();
 
+    //ブロックを生成する
+    foreach(Block b in map.Blocks)
+    {
+      GameObject block= new GameObject($"Block");
+      block.transform.SetParent(o.transform);
+//      block.AddComponent<BlockGenerator>();
+    }
+
     return map;
   }
+
 }

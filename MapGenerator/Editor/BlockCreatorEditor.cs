@@ -4,23 +4,24 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.AI;
 
-[CustomEditor(typeof(MapGenerator))]
-public class MapGeneratorEditor:Editor
+[CustomEditor(typeof(BlockGenerator))]
+public class BlockCreatorEditor:Editor
 {
 
   public override void OnInspectorGUI()
   {
 
-    MapGenerator target = this.target as MapGenerator;
+    CityCreator target = this.target as CityCreator;
     base.OnInspectorGUI();
-    if (GUILayout.Button("Button"))
+    if (GUILayout.Button("Generate"))
     {
       //code
       var o= target.Generate();
-
       GameObjectUtility.SetStaticEditorFlags(o, StaticEditorFlags.NavigationStatic);
+
       //NavMeshBuilder.BuildNavMeshData(NavMeshBuilder.)
     }
+
 
   }  
 }
