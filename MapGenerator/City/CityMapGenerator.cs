@@ -19,7 +19,7 @@ public class CityMapGeneratorParam
   public float minStreetHeight = 10f;
 }
 
-public class CityMapGenerator : IMapGenerator
+public class CityMapGenerator : IMapGenerator<MapData>
 {
 
   private CityMapGeneratorParam param;
@@ -49,30 +49,30 @@ public class CityMapGenerator : IMapGenerator
     //まずはターゲットのAvenueを選択
 
     //通りをYでsortしたマップを作る
-    List<Line> YsortAvenues = avenues.OrderBy(line => line.from.x).ToList();
+    List<Line> XsortAvenue = avenues.OrderBy(line => line.from.x).ToList();
     //とりあえず頭に0サイズを追加
-    YsortAvenues.Insert(0,
+    XsortAvenue.Insert(0,
       Line.From(
-      Point2F.From(0, 0),
-      Point2F.From(0, param.Height)
+      Point2F.From(-param.minStreetWidth, 0),
+      Point2F.From(-param.minStreetWidth, param.Height)
       ));
     //末尾に最大サイズを追加
-    YsortAvenues.Add(
+    XsortAvenue.Add(
       Line.From(
-      Point2F.From(param.Width, 0),
-      Point2F.From(param.Width, param.Height)
+      Point2F.From(param.Width+param.minStreetWidth, 0),
+      Point2F.From(param.Width+param.minStreetWidth, param.Height)
       ));
 
 
     //幅を計算
     List<(Line, float)> WidthIndexedAvenues =
-    YsortAvenues
+    XsortAvenue
       .Select((Line line, int index) => {
           //次のindex獲得
           float width = 0;
-        if (index < YsortAvenues.Count - 1)
+        if (index < XsortAvenue.Count - 1)
         {
-          width = YsortAvenues[index + 1].from.x - YsortAvenues[index].from.x;
+          width = XsortAvenue[index + 1].from.x - XsortAvenue[index].from.x;
         }
 
         return (line, width);
@@ -104,7 +104,7 @@ public class CityMapGenerator : IMapGenerator
 
   private Line? genStreet()
   {
-    //一本もない場合は「ランダム
+    //一本もない場合はとりあえず長辺に沿って作る
     if (streets.Count == 0)
     {
       var ya = Random.Range(param.Height,0);
@@ -112,6 +112,8 @@ public class CityMapGenerator : IMapGenerator
         Point2F.From(0, ya),
         Point2F.From(param.Width,ya)
       );
+
+
     }
 
     //通りをYでsortしたマップを作る
@@ -119,14 +121,14 @@ public class CityMapGenerator : IMapGenerator
     //とりあえず頭に0サイズを追加
     YSortStreets.Insert(0,
       Line.From(
-      Point2F.From(0, 0),
-      Point2F.From(param.Width,0)
+      Point2F.From(0, -param.minStreetHeight),
+      Point2F.From(param.Width,-param.minStreetHeight)
       ));
     //末尾に最大サイズを追加
     YSortStreets.Add(
       Line.From(
-      Point2F.From(0, param.Height),
-      Point2F.From(param.Width, param.Height)
+      Point2F.From(0, param.Height+param.minStreetHeight),
+      Point2F.From(param.Width, param.Height+param.minStreetHeight)
       ));
 
 
@@ -171,7 +173,7 @@ public class CityMapGenerator : IMapGenerator
   }
 
 
-  public void Generate(GameObject o)
+  MapData IMapGenerator<MapData>.Generate(GameObject o)
   {
     //面を追加
     GameObject plane= GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -207,6 +209,7 @@ public class CityMapGenerator : IMapGenerator
     map.Avenues = avenues;
     map.Streets = streets;
     map.Reculculate();
-  }
 
+    return map;
+  }
 }

@@ -179,6 +179,11 @@ namespace MapGen.City
         Point=Line.CrossPoint(X,Y)
       };
     }
+
+    public override string ToString()
+    {
+      return $"P{Point}";
+    }
   }
 
   public struct DirectionCursor<T>
@@ -236,21 +241,28 @@ namespace MapGen.City
     public DirectionCursor<CrossPoint> Cursor(CrossPoint A)
     {
       return new DirectionCursor<CrossPoint>() { 
-        N = this.Where(B => A.Point.x.Equals(B.Point.x) && A.Point.y < B.Point.y)
+        N = this
+        .Where(B => 
+          A.Point.x.Equals(B.Point.x) 
+          && A.Point.y < B.Point.y)
         .OrderBy(B => Mathf.Abs(B.Point.y - A.Point.y))
+        .Select(o => { CrossPoint? r = o; return r; })
         .FirstOrDefault(),
         E= this.Where(B =>
          A.Point.y.Equals(B.Point.y)
          && B.Point.x < A.Point.x)
         .OrderBy(B => Mathf.Abs(B.Point.x - A.Point.x))
+        .Select(o => { CrossPoint? r = o; return r; })
         .FirstOrDefault(),
         W= this.Where(B =>
          A.Point.y.Equals(B.Point.y)
          && A.Point.x < B.Point.x)
         .OrderBy(B => Mathf.Abs(B.Point.x - A.Point.x))
+        .Select(o => { CrossPoint? r = o; return r; })
         .FirstOrDefault(),
         S= this.Where(B => A.Point.x.Equals(B.Point.x) && B.Point.y < A.Point.y)
         .OrderBy(B => Mathf.Abs(B.Point.y - A.Point.y))
+        .Select(o => { CrossPoint? r = o; return r; })
         .FirstOrDefault()
       };
     }
@@ -295,6 +307,8 @@ namespace MapGen.City
 
               if (nextCursor.E.HasValue)
               {
+                CrossPoint topRight = nextCursor.E.Value;
+                //Debug.Log($"{topLeft},{bottomLeft},{bottomLeft},{bottomRight}");
                 //揃った
                 carry.Add(
                   Block.From(
@@ -302,6 +316,10 @@ namespace MapGen.City
                   bottomLeft, bottomRight)
                   );
               }
+            }
+            else
+            {
+
             }
             return carry;
           }
