@@ -22,6 +22,11 @@ namespace MapGen.City
     {
       return $"[{x},{y}]";
     }
+
+    public Vector3 toVector3()
+    {
+      return new Vector3(x, 0, y);
+    }
   }
 
 
@@ -75,13 +80,39 @@ namespace MapGen.City
   }
 
   /*
-   *大きい道路に挟まれた四角形の空間ビルが複数ある
+   *道路に挟まれた四角形の空間
    *
   */
+  [Serializable]
   public struct Block
   {
     public CrossPoint TopLeft, TopRight, BottomLeft, BottomRight;
 
+    public float Width;
+    public float Height;  
+
+    public Point2F Center => Line.CrossPoint(
+        Line.From(TopLeft.Point,BottomRight.Point),
+        Line.From(TopRight.Point,BottomLeft.Point)
+      );
+
+
+    public static Block From(
+     CrossPoint TopLeft, 
+     CrossPoint TopRight,
+     CrossPoint BottomLeft,
+     CrossPoint BottomRight)
+    {
+      return new Block()
+      {
+        TopLeft = TopLeft,
+        TopRight = TopRight,
+        BottomLeft = BottomLeft,
+        BottomRight = BottomRight,
+        Width=Mathf.Abs(TopLeft.Point.x - TopRight.Point.x),
+        Height= Mathf.Abs(TopLeft.Point.y - BottomLeft.Point.y)
+    };
+    }
   }
   public class Blocks : List<Block>
   {
@@ -122,10 +153,15 @@ namespace MapGen.City
     }
   }
 
+  [Serializable]
+  [SerializeField]
   public struct CrossPoint
   {
+    [SerializeField]
     public Point2F Point;
+    [SerializeField]
     public Line X;
+    [SerializeField]
     public Line Y;
 
     public static CrossPoint? From(Line X,Line Y)
@@ -144,6 +180,14 @@ namespace MapGen.City
       };
     }
   }
+
+  public struct DirectionCursor<T>
+    where T:struct
+  {
+    public T? N,E,W,S;
+  }
+
+  [Serializable]
   public class CrossPoints : List<CrossPoint>
   {
     public CrossPoints FindManHattenLength(CrossPoint A,int length,ref CrossPoints carry)
@@ -156,8 +200,6 @@ namespace MapGen.City
       {
         return carry;
       }
-
-
 
       //UP (+Y)
       CrossPoint up=this.Where(B =>  A.Point.x.Equals(B.Point.x) && A.Point.y < B.Point.y)
@@ -183,10 +225,34 @@ namespace MapGen.City
       if (!carry.Contains(right)) carry.Add(down);
       if (!carry.Contains(left)) carry.Add(down);
 
-
-
+      this.FindManHattenLength(up, length - 1,ref carry);
+      this.FindManHattenLength(down, length - 1, ref carry);
+      this.FindManHattenLength(right, length - 1, ref carry);
+      this.FindManHattenLength(left, length - 1, ref carry);
 
       return carry;
+    }
+
+    public DirectionCursor<CrossPoint> Cursor(CrossPoint A)
+    {
+      return new DirectionCursor<CrossPoint>() { 
+        N = this.Where(B => A.Point.x.Equals(B.Point.x) && A.Point.y < B.Point.y)
+        .OrderBy(B => Mathf.Abs(B.Point.y - A.Point.y))
+        .FirstOrDefault(),
+        E= this.Where(B =>
+         A.Point.y.Equals(B.Point.y)
+         && B.Point.x < A.Point.x)
+        .OrderBy(B => Mathf.Abs(B.Point.x - A.Point.x))
+        .FirstOrDefault(),
+        W= this.Where(B =>
+         A.Point.y.Equals(B.Point.y)
+         && A.Point.x < B.Point.x)
+        .OrderBy(B => Mathf.Abs(B.Point.x - A.Point.x))
+        .FirstOrDefault(),
+        S= this.Where(B => A.Point.x.Equals(B.Point.x) && B.Point.y < A.Point.y)
+        .OrderBy(B => Mathf.Abs(B.Point.y - A.Point.y))
+        .FirstOrDefault()
+      };
     }
   }
 
@@ -194,12 +260,14 @@ namespace MapGen.City
   {
     public List<Line> Avenues;
     public List<Line> Streets;
-    public CrossPoints CrossPoints=new CrossPoints();
-    public List<Block> Blocks = new List<Block>();
+    [SerializeField]
+    public List<CrossPoint> CrossPoints=new List<CrossPoint>();
+    [SerializeField]
+    public List<Block> Blocks = new Blocks();
 
     public void Reculculate()
     {
-      CrossPoints =
+      CrossPoints crossPoints=
         Avenues.Aggregate(new CrossPoints(),
           (carry, Y) => {
             carry.AddRange(
@@ -209,12 +277,32 @@ namespace MapGen.City
               );
             return carry;
           });
+      CrossPoints = crossPoints;
+
       Blocks = 
-        CrossPoints.Aggregate(new List<Block>(),
+        CrossPoints.Aggregate(new Blocks(),
           (carry, P) =>
           {
-            //U,UR,Rを集めて
+            CrossPoint bottomLeft = P;
+            DirectionCursor<CrossPoint> cursor = crossPoints.Cursor(P);
 
+            if (cursor.E.HasValue && cursor.N.HasValue)
+            {
+              CrossPoint bottomRight = cursor.E.Value;
+              CrossPoint topLeft = cursor.N.Value;
+              DirectionCursor<CrossPoint> nextCursor = 
+                crossPoints.Cursor(topLeft);
+
+              if (nextCursor.E.HasValue)
+              {
+                //揃った
+                carry.Add(
+                  Block.From(
+                  topLeft, nextCursor.E.Value,                   
+                  bottomLeft, bottomRight)
+                  );
+              }
+            }
             return carry;
           }
         );
@@ -222,17 +310,8 @@ namespace MapGen.City
     }
 
 
-    //四面を取得
-    public List<Block> Squares{
 
-      get { 
-        //原点、上、上右、右でポイントをとっていく
-      
-      return new List<Block>(); 
-      }
-    }
-
-
+    //デバッグ用表示
     private void OnDrawGizmos()
     {
       Gizmos.color = Color.blue;
@@ -257,6 +336,20 @@ namespace MapGen.City
       {
         Gizmos.DrawSphere(new Vector3(p.Point.x, 0, p.Point.y), 1);
       }
+
+      Gizmos.color = Color.cyan*0.5f;
+      foreach(Block b in Blocks)
+      {
+        Gizmos.DrawCube(
+          b.Center.toVector3()
+          +Vector3.up*5f,
+          new Vector3(
+            b.Width-0.5f,
+            10,
+            b.Height-0.5f)
+            );
+      }
+
     }
 
   }

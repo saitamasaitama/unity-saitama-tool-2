@@ -206,6 +206,7 @@ public class CityMapGenerator : IMapGenerator
     MapData map = o.AddComponent<MapData>();
     map.Avenues = avenues;
     map.Streets = streets;
+    map.Reculculate();
   }
 
 }
