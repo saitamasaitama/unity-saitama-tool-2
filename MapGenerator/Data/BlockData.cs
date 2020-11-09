@@ -11,7 +11,7 @@ public class BlockData : MonoBehaviour
   [SerializeField]
   public Block data;
   [SerializeField]
-  //public List<BuildingData> Blocks = new Blocks();
+  public List<BuildingData> Buildings = new List<BuildingData>();
 
 
   //地上部高さ
