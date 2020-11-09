@@ -14,14 +14,10 @@ public class MenuExtendsEditor : Editor
   public static void Foo()
   {
     var gameObject = Selection.activeGameObject;
-
-
     UnityEngine.Debug.Log($@"
             CHILD={gameObject.transform.GetComponentsInChildren<Transform>().Length}
             ");
   }
-
-
 
 
   [MenuItem("Assets/Create/C# Editor Script", priority = 41, validate = false)]
