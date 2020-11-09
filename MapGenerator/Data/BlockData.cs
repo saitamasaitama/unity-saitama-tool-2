@@ -6,29 +6,21 @@ using System.Linq;
 using MapGen.City;
 
 
-public class BlockData : MonoBehaviour
+public class BlockData : GenericData
 {
   [SerializeField]
-  public Block data;
+  public Block block;
   [SerializeField]
   public List<BuildingData> Buildings = new List<BuildingData>();
 
 
   //地上部高さ
   public float BuildingGroundHeight;
-  //地下部高さ
-  public float BuildingUnderGroundHeight;
+  //地下部深さ
+  public float BuildingUnderGroundDepth;
 
-  public void OnDrawGizmosSelected()
+  public override void Reset()
   {
-    Gizmos.color = Color.magenta*0.5f;
-    Gizmos.DrawCube(
-      data.Center.toVector3()
-      + Vector3.up * 5f,
-      new Vector3(
-        data.Width,
-        10,
-        data.Height)
-        );        
+    throw new NotImplementedException();
   }
 }

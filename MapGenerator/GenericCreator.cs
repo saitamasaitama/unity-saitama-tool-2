@@ -21,9 +21,10 @@ public class GenericParameters
 
 [ExecuteInEditMode]
 public abstract class GenericCreator<PARAM,DATA> : MonoBehaviour
-  where DATA:MonoBehaviour
+  where DATA:GenericData
   where PARAM:GenericParameters
 {
+  [SerializeField]
   public DATA data=null;
   public PARAM param;
 
@@ -36,15 +37,13 @@ public abstract class GenericCreator<PARAM,DATA> : MonoBehaviour
     //古いデータは削除
     if (data != null)
     {
-      for(int i = data.transform.childCount; 0 < i; i--)
+      for(int i = o.transform.childCount; 0 < i; i--)
       {
-        DestroyImmediate(data.transform.GetChild(i - 1).gameObject);
+        DestroyImmediate(o.transform.GetChild(i - 1).gameObject);
       }
     }
 
     //削除すると不味いような
-    //DestroyImmediate(data);
-
     data = generator.Generate(o,data);
     //都市を作ったので順次ブロックを生成
     return o;

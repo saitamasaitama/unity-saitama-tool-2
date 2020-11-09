@@ -7,4 +7,5 @@ public class BuildingCreator : GenericCreator<BuildingGeneratorParam, BuildingDa
   {
     return new BuildingGenerator(param);
   }
+
 }

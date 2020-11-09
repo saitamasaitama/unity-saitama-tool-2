@@ -216,7 +216,8 @@ public class CityGenerator : GenericGenerator<CityGeneratorParam,CityData>
       }
     }
 
-    CityData map = o.AddComponent<CityData>();
+    //この辺改良できるはず
+    CityData map = new CityData();
     map.Avenues = avenues;
     map.Streets = streets;
     map.Reculculate();
@@ -225,8 +226,8 @@ public class CityGenerator : GenericGenerator<CityGeneratorParam,CityData>
     foreach(Block block in map.Blocks)
     {
       GameObject blockObj= new GameObject($"Block");
-      BlockData data=blockObj.AddComponent<BlockData>();
-      data.data=block;
+      BlockData data=new BlockData();
+      data.block=block;
       blockObj.transform.SetParent(o.transform);
       blockObj.transform.position = o.transform.position + block.Center.toVector3();
       BlockCreator creator= blockObj.AddComponent<BlockCreator>();

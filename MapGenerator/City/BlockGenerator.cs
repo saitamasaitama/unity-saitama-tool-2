@@ -43,6 +43,7 @@ public class BlockGenerator : IMapGenerator<BlockData>
 
   public BlockData Generate(GameObject o, BlockData oldData)
   {
+
     //BlockData block = o.AddComponent<BlockData>();
     /*
     /**

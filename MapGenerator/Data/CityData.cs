@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using MapGen.City;
 
-/*
- * 非MonoBehaviourにできるはず 
- */
-public class CityData : MonoBehaviour
+[Serializable]
+public class CityData : GenericData
 {
+  [SerializeField]
   public List<Line> Avenues;
+  [SerializeField]
   public List<Line> Streets;
   [SerializeField]
   public List<CrossPoint> CrossPoints = new List<CrossPoint>();
@@ -22,9 +22,15 @@ public class CityData : MonoBehaviour
 
     CrossPoints crossPoints = culculateCrossPoints();
     CrossPoints = crossPoints;
-
     Blocks = culcurateBlocks(crossPoints);
- 
+  }
+
+  /*
+    リセット処理
+  */
+  public override void Reset()
+  {
+    throw new NotImplementedException();
   }
 
   private CrossPoints culculateCrossPoints()
@@ -75,32 +81,5 @@ public class CityData : MonoBehaviour
   }
 
 
-  //デバッグ用表示→Generatorに持たせるべき
-  private void OnDrawGizmos()
-  {
-    Gizmos.color = Color.blue;
-    foreach (Line l in Streets)
-    {
-      Gizmos.DrawLine(
-        new Vector3(l.from.x, 0, l.from.y),
-        new Vector3(l.to.x, 0, l.to.y)
-      );
-    }
-    Gizmos.color = Color.red;
-    foreach (Line l in Avenues)
-    {
-      Gizmos.DrawLine(
-        new Vector3(l.from.x, 0, l.from.y),
-        new Vector3(l.to.x, 0, l.to.y)
-      );
-    }
-
-    Gizmos.color = Color.red;
-    foreach (CrossPoint p in CrossPoints)
-    {
-      Gizmos.DrawSphere(new Vector3(p.Point.x, 0, p.Point.y), 1);
-    }
-
-  }
 
 }

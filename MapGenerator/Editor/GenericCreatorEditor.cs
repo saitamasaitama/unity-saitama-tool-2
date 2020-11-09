@@ -7,6 +7,7 @@ using UnityEngine.AI;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
+using MapGen.City;
 
 
 public class ShowCreatorNameWindow : EditorWindow
@@ -127,7 +128,8 @@ using System.Collections.Generic;
 using System.Linq;
 using MapGen.City;
 
-public class {name}Data : MonoBehaviour
+[Serializable]
+public class {name}Data : GenericData
 {{
 }}
 ";
@@ -180,7 +182,7 @@ public class {name}Generator : IMapGenerator<{name}Data>
 
 //[CustomEditor(typeof(CityCreator))]
 public abstract class GenericCreatorEditor<PARAM,DATA,CREATOR>:Editor
-  where DATA : MonoBehaviour
+  where DATA : GenericData
   where PARAM : GenericParameters
   where CREATOR :GenericCreator<PARAM,DATA>
 {
