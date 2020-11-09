@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MapGen.City;
 
-
+[Serializable]
 public class BlockData : GenericData
 {
   [SerializeField]

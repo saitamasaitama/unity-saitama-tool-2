@@ -27,6 +27,8 @@ public class BuildingGenerator : IMapGenerator<BuildingData>
 
   public BuildingData Generate(GameObject o, BuildingData oldData)
   {
+    //フロアを作る
+
     throw new NotImplementedException();
   }
 }

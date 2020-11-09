@@ -44,28 +44,30 @@ public class BlockGenerator : IMapGenerator<BlockData>
   public BlockData Generate(GameObject o, BlockData oldData)
   {
 
-    //BlockData block = o.AddComponent<BlockData>();
-    /*
-    /**
-    CityData map = o.AddComponent<CityData>();
-    map.Avenues = avenues;
-    map.Streets = streets;
-    map.Reculculate();
+    oldData.Buildings.Clear();
 
-    //ブロックを生成する
-    foreach(Block block in map.Blocks)
+    var result = oldData;
+
+    //雑にビルを生成
+    for(int i = 0; i < 10; i++)
     {
-      GameObject blockObj= new GameObject($"Block");
-      BlockData data=blockObj.AddComponent<BlockData>();
-      data.data=block;
-      blockObj.transform.SetParent(o.transform);
-      blockObj.transform.position = o.transform.position + block.Center.toVector3();
-      BlockCreator creator= blockObj.AddComponent<BlockCreator>();
-      creator.data = data;
+      var building = new GameObject("building");
+      building.transform.SetParent(o.transform);
+      var buildingCreator = building.AddComponent<BuildingCreator>();
+      buildingCreator.data = new BuildingData();
+      buildingCreator.data.building = new Building()
+      {
+        Width = param.minBuildingWidth,
+        Height = param.minBuildingHeight,
+        Center = Point2F.From(1, 1),
+        GroundHeight = 10f,
+        GroundDepth =1,
+        owner = result.block        
+      };
+      result.Buildings.Add(buildingCreator.data);
     }
-     * */
 
 
-    return oldData;
+    return result;
   }
 }

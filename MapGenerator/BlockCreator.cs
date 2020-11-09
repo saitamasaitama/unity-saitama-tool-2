@@ -17,6 +17,8 @@ public class BlockCreator : GenericCreator<BlockGeneratorParam, BlockData>
 
   public void OnDrawGizmosSelected()
   {
+    if (this.data == null) return;
+
     Gizmos.color = Color.magenta * 0.5f;
     Gizmos.DrawCube(
 
