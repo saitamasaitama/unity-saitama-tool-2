@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-using UnityEngine.AI;
+﻿using UnityEditor;
 
 [CustomEditor(typeof(CityCreator))]
 public class CityCreatorEditor:GenericCreatorEditor

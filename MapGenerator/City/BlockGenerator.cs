@@ -46,5 +46,4 @@ public class BlockGenerator : IMapGenerator<BlockData>
     
     throw new NotImplementedException();
   }
-
 }

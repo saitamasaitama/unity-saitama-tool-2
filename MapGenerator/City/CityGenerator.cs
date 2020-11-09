@@ -38,7 +38,6 @@ public class CityGenerator : GenericGenerator<CityGeneratorParam,CityData>
 
   public CityGenerator(CityGeneratorParam param):base(param)
   {
-  
   }
 
 
