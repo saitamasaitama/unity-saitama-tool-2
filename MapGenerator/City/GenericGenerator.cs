@@ -9,6 +9,6 @@ public abstract class GenericGenerator<PARAM, DATA> : IMapGenerator<DATA>
   {
     this.param = param;
   }
-  public abstract DATA Generate(GameObject o);
+  public abstract DATA Generate(GameObject o, DATA oldData);
 }
 

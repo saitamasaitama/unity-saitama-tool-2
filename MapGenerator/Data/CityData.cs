@@ -75,7 +75,7 @@ public class CityData : MonoBehaviour
   }
 
 
-  //デバッグ用表示
+  //デバッグ用表示→Generatorに持たせるべき
   private void OnDrawGizmos()
   {
     Gizmos.color = Color.blue;

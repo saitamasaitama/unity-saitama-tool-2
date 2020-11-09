@@ -1,12 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-using MapGen.City;
-
-using System;
-using Random = UnityEngine.Random;
-
+﻿using UnityEngine;
 [ExecuteInEditMode]
 public class CityCreator : GenericCreator<CityGeneratorParam, CityData>
 {

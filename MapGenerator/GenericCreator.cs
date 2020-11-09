@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 public interface IMapGenerator<T>
 {
-  T Generate(GameObject o);
+  T Generate(GameObject o,T oldData);
 }
 
 //クラス
@@ -24,8 +24,6 @@ public abstract class GenericCreator<PARAM,DATA> : MonoBehaviour
   where DATA:MonoBehaviour
   where PARAM:GenericParameters
 {
-
-
   public DATA data=null;
   public PARAM param;
 
@@ -42,9 +40,12 @@ public abstract class GenericCreator<PARAM,DATA> : MonoBehaviour
       {
         DestroyImmediate(data.transform.GetChild(i - 1).gameObject);
       }
-      DestroyImmediate(data);
     }
-    data = generator.Generate(o);
+
+    //削除すると不味いような
+    //DestroyImmediate(data);
+
+    data = generator.Generate(o,data);
     //都市を作ったので順次ブロックを生成
     return o;
   }

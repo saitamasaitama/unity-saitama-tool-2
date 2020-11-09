@@ -27,10 +27,8 @@ public class CityGeneratorParam:GenericParameters
 /// City map generator.
 /// </summary>
 public class CityGenerator : GenericGenerator<CityGeneratorParam,CityData>
-//IMapGenerator<CityData>
 {
 
-  //private CityMapGeneratorParam param;
   private Graph<Line> lines = new Graph<Line>();
   private List<Line> avenues = new List<Line>();
   private List<Line> streets = new List<Line>();
@@ -186,7 +184,7 @@ public class CityGenerator : GenericGenerator<CityGeneratorParam,CityData>
   /// </summary>
   /// <returns>The ap generator< city data>. generate.</returns>
   /// <param name="o">O.</param>
-  public override CityData Generate(GameObject o)
+  public override CityData Generate(GameObject o, CityData oldData)
   {
     //面を追加
     GameObject plane= GameObject.CreatePrimitive(PrimitiveType.Plane);

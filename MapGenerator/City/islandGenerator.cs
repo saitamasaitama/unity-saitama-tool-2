@@ -25,8 +25,8 @@ public class islandGenerator : IMapGenerator<islandData>
 
   }
 
-  public islandData Generate(GameObject o)
-  {    
+  public islandData Generate(GameObject o, islandData oldData)
+  {
     throw new NotImplementedException();
   }
 }

@@ -25,8 +25,8 @@ public class BuildingGenerator : IMapGenerator<BuildingData>
 
   }
 
-  public BuildingData Generate(GameObject o)
-  {    
+  public BuildingData Generate(GameObject o, BuildingData oldData)
+  {
     throw new NotImplementedException();
   }
 }
