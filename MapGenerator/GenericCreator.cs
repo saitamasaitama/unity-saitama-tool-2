@@ -42,10 +42,7 @@ public abstract class GenericCreator<PARAM,DATA> : MonoBehaviour
         DestroyImmediate(o.transform.GetChild(i - 1).gameObject);
       }
     }
-
-    //削除すると不味いような
     data = generator.Generate(o,data);
-    //都市を作ったので順次ブロックを生成
     return o;
   }
 }

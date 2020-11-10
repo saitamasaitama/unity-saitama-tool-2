@@ -36,7 +36,5 @@ public class CityCreator : GenericCreator<CityGeneratorParam, CityData>
       Gizmos.DrawSphere(new Vector3(p.Point.x, 0, p.Point.y), 1);
     }
   }
-
-
 }
 
