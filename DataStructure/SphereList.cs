@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 //球
 class SphereList<T>:List<SphereListItem<T>>{
-   public SphereList<T>(float radius):base<T>(){
+   public SphereList(float radius):base(){
     
    }
    private int[] index;
@@ -16,7 +16,7 @@ class SphereListItem<T>{
   public SphereList<T> owner;
 
 
-  public Move(float x,float y){
+  public void Move(float x,float y){
 
   }
 }
