@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(groupModify))]
-public class groupModifyEditor:Editor
+[CustomEditor(typeof(HumanoidSense))]
+public class HumanoidSenseEditor:Editor
 {
 
   public override void OnInspectorGUI()
   {
 
-    groupModify target = this.target as groupModify;
+    HumanoidSense target = this.target as HumanoidSense;
     base.OnInspectorGUI();
 
     
