@@ -10,23 +10,39 @@ public abstract class SceneViewExtendsEditor
   //対象のエディタを指定
   static readonly List<SceneViewExtendsEditor> SceneViewEditors = new List<SceneViewExtendsEditor>()
   {
-    new QVSceneViewExtendsEditor()
+    new QVSceneViewExtendsEditor(),
+    new TriangleSelectSceneViewExtends()
   };
 
 
 
   static SceneViewExtendsEditor()
   {
-    Handles.BeginGUI();
+    
     foreach(var e in SceneViewEditors)
     {
-      SceneView.duringSceneGui += e.OnGUI;
+      SceneView.duringSceneGui += e.OnGUI;      
     }
+    
+    
+  }
+  /*
+  private void OnGUI(SceneView scene)
+  {
+
+  }
+  */
+
+  protected void OnGUI(SceneView scene)
+  {
+    Handles.BeginGUI();
+
+    DoGUI(scene);
+
     Handles.EndGUI();
   }
 
-
-  protected abstract void OnGUI(SceneView scene);
+  protected abstract void DoGUI(SceneView scene);
 
 
   public static void Area(Rect rect, Action A)

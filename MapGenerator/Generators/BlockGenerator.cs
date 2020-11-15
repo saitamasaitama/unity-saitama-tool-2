@@ -55,7 +55,14 @@ public class BlockGenerator : IMapGenerator<BlockData>
       building.transform.SetParent(o.transform);
       var buildingCreator = building.AddComponent<BuildingCreator>();
       buildingCreator.data = new BuildingData();
-      buildingCreator.data.building = new Building()
+      Debug.Log("data set");
+      buildingCreator.data.building = new MapGen.City.Building()
+      {
+        Width = 1f
+
+      };
+      /*
+      buildingCreator.data.building = new MapGen.City.Building()
       {
         Width = param.minBuildingWidth,
         Height = param.minBuildingHeight,
@@ -64,6 +71,8 @@ public class BlockGenerator : IMapGenerator<BlockData>
         GroundDepth =1,
         owner = result.block        
       };
+      */
+
       result.Buildings.Add(buildingCreator.data);
     }
 

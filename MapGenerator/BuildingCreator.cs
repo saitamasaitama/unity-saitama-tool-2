@@ -1,5 +1,7 @@
 ﻿
 using UnityEngine;
+using MapGen.City;
+
 [ExecuteInEditMode]
 public class BuildingCreator : GenericCreator<BuildingGeneratorParam, BuildingData>
 {

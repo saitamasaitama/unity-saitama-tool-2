@@ -6,16 +6,9 @@ using UnityEditor;
 
 public class QVSceneViewExtendsEditor:SceneViewExtendsEditor
 {
-  protected override void OnGUI(SceneView scene)
+  protected override void DoGUI(SceneView scene)
   {
     NavigationIconSets(scene);
-    if (Event.current.type == EventType.MouseDown)
-    {
-      if (Event.current.button == 1)
-      {
-        Debug.Log("Button On");
-      }
-    }
   }
 
   private void NavigationIconSets(SceneView scene)

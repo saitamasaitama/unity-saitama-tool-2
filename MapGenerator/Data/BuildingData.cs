@@ -12,7 +12,7 @@ public class BuildingData : GenericData
   [SerializeField]
   public Block block;
   [SerializeField]
-  public Building building;
+  public MapGen.City.Building building;
 
   public override void Reset()
   {
