@@ -15,7 +15,15 @@ public class TriangleSelectSceneViewExtends : SceneViewExtendsEditor
   private bool isHit = false;
   public SkinnedMeshRenderer selectSkinnedMesh = null;
 
+  public TriangleSelectSceneViewExtends(){
+    OnMouseDown += TriangleSelectSceneViewExtends_OnMouseClick;
 
+  }
+
+  private void TriangleSelectSceneViewExtends_OnMouseClick(int obj)
+  {
+    Debug.Log($"CLICK={obj}");
+  }
 
   protected override void DoGUI(SceneView scene)
   {
@@ -34,9 +42,7 @@ public class TriangleSelectSceneViewExtends : SceneViewExtendsEditor
   {
     Event e = Event.current;
     if (!Selection.activeObject) return false;
-
     MeshCollider collider = Selection.activeGameObject.GetComponent<MeshCollider>();
-
     if (!collider) return false;
     if (!(e.type == EventType.MouseDown && e.button == 0)) return false;
 
