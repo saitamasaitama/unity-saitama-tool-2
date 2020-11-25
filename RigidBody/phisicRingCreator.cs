@@ -15,11 +15,6 @@ public class phisicRingCreator : MonoBehaviour
 
   public void Create()
   {
-
-
-
-    //CreateRing();
-
     CreateSphere();
   }
 
@@ -28,8 +23,6 @@ public class phisicRingCreator : MonoBehaviour
   {
     //円状に
     GameObject o = new GameObject("PhysicSphere");
-
-
 
   }
 
