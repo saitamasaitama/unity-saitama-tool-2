@@ -10,9 +10,11 @@ public abstract class SceneViewExtendsEditor
   //対象のエディタを指定
   static readonly List<SceneViewExtendsEditor> SceneViewEditors = new List<SceneViewExtendsEditor>()
   {
+    /*
     new SkinnedMeshSelector(),
     new QVSceneViewExtendsEditor(),
     new TriangleSelectSceneViewExtends()
+    */ 
   };
 
 
