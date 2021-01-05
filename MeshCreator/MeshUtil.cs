@@ -137,14 +137,14 @@ namespace MeshUtil
       List<Vector3> result = new List<Vector3>();
 
 
-      float step =(float)(Length / (Cut + 1.0f));
-      for(int c = 0; c < Cut+2; c++)
+      float step = (float)(Length / (Cut + 1.0f));
+      for (int c = 0; c < Cut + 2; c++)
       {
-        for(int i = 0; i < Rounds; i++)
+        for (int i = 0; i < Rounds; i++)
         {
           //カット処理
           result.Add(Vector3.up * step * c +
-            Quaternion.Euler(0, (360 / Rounds) * i, 0) * Vector3.forward*(Thick/2f)
+            Quaternion.Euler(0, (360 / Rounds) * i, 0) * Vector3.forward * (Thick / 2f)
             );
         }
       }
@@ -157,7 +157,7 @@ namespace MeshUtil
     public List<int> Indices()
     {
       //面の処理
-      var result= new List<int>();
+      var result = new List<int>();
       int verticsCount = (Cut + 2) * Rounds;
 
       for (int i = 0; i < Rounds; i++)
@@ -173,7 +173,7 @@ namespace MeshUtil
 
           int C = j + ((i + 1) % Rounds);
           int D = j + i;
-         
+
           result.AddRange(Square.Quad2TriIndex(A, B, C, D).ToList());
 
 

@@ -33,31 +33,32 @@ public class boxcelCreator : MonoBehaviour
     meshFilter.mesh = BoxMesh();
 
     var meshRenderer = result.AddComponent<MeshRenderer>();
-   
-    meshRenderer.sharedMaterial= BoxMaterial(tex);
+
+    //meshRenderer.sharedMaterial= BoxMaterial(tex);
     meshRenderer.material = BoxMaterial(tex);
 
     tex.SetPixel(3, 3, Color.white);
-    meshRenderer.material.SetTexture("_MainTex", tex);
+    //meshRenderer.material.SetTexture("_MainTex", tex);
 
   }
 
   private Texture2D BoxTexture()
   {
-    var tex = new Texture2D(16, 48,TextureFormat.ARGB32,false);
+    var tex = new Texture2D(16, 48, TextureFormat.ARGB32, false);
     //tex.alphaIsTransparency = true;
     tex.filterMode = FilterMode.Point;
-    
+
     tex.SetPixels(0, 0, 16, 16,
       Enumerable.Repeat(TopColor, 16 * 16)
-      .Select(c=> {
+      .Select(c =>
+      {
         Color.RGBToHSV(c, out float H, out float S, out float V);
         return Color.HSVToRGB(H, S, V * Random.Range(0.8f, 1.2f));
       })
       .ToArray());
 
 
-    tex.SetPixels(0, 16, 16, 16, Enumerable.Repeat(SideColor,  16 * 16).ToArray());
+    tex.SetPixels(0, 16, 16, 16, Enumerable.Repeat(SideColor, 16 * 16).ToArray());
     tex.SetPixels(0, 32, 16, 16, Enumerable.Repeat(BottomColor, 16 * 16).ToArray());
     tex.Apply();
     return tex;
@@ -70,56 +71,62 @@ public class boxcelCreator : MonoBehaviour
   {
     var result = new Mesh();
     //頂点は16
-    result.SetVertices(new List<Vector3>() {
-      //TOP
-      Cube.LEFT_BACK_UP,
-      Cube.RIGHT_BACK_UP,      
-      Cube.LEFT_FORE_UP,
-      Cube.RIGHT_FORE_UP,
+    result.SetVertices(
+      Enumerable.Range(0, 6)
+      .Select(i => (i, Quad.VERTEX))
+      .Aggregate(new List<Vector3>(),
+        (carry, item) =>
+        {
+          Debug.Log($"i={item.i}");
+          switch (item.i)
+          {
+            //0は無回転
+            case 1:
+              item.VERTEX = item.VERTEX.Select(v => Quaternion.Euler(-90, 0, 0) * v).ToArray();
+              break;
+            case 2:
+              item.VERTEX = item.VERTEX.Select(v => Quaternion.Euler(-90, 90, 0) * v).ToArray();
+              break;
+            case 3:
+              item.VERTEX = item.VERTEX.Select(v => Quaternion.Euler(-90, 180, 0) * v).ToArray();
+              break;
+            case 4:
+              item.VERTEX = item.VERTEX.Select(v => Quaternion.Euler(-90, 270, 0) * v).ToArray();
+              break;
+            case 5:
+              item.VERTEX = item.VERTEX.Select(v => Quaternion.Euler(180, 0, 0) * v).ToArray();
+              break;
+            default: break;
+          }
+          carry.AddRange(item.VERTEX);
+          return carry;
+        })
 
-      //Side L-R      
-      Cube.LEFT_FORE_UP,
-      Cube.RIGHT_FORE_UP,
-      Cube.LEFT_FORE_DOWN,
-      Cube.RIGHT_FORE_DOWN,
-
-      Cube.LEFT_BACK_UP,
-      Cube.RIGHT_BACK_UP,
-      Cube.LEFT_BACK_DOWN,
-      Cube.RIGHT_BACK_DOWN,
+    );
+    Debug.Log($"{result.vertexCount}");
 
 
+    result.SetUVs(0,
+      Enumerable.Range(0, 6)
+      .Select(index => Quad.UV.Select(v2 => v2))
+      .Aggregate(new List<Vector2>(),
+      (carrry, item) =>
+      {
+        carrry.AddRange(item);
+        return carrry;
+      })
+     );
 
-      //Bottom
-      Cube.LEFT_BACK_DOWN,
-      Cube.RIGHT_BACK_DOWN,
-      Cube.LEFT_FORE_DOWN,
-      Cube.RIGHT_FORE_DOWN,
-
-    });
-
-    result.SetUVs(0, new List<Vector2>()
+    result.SetIndices(
+    Enumerable.Range(0, 6).Select(i => Quad.INDEX_FORE.Select(index => index + (i * 4)).ToArray())
+    .Aggregate(new List<int>(), (carry, item) =>
     {
-      Vector2.zero,
-      Vector2.right,
-      Vector2.zero+(Vector2.up/3),
-      Vector2.right+(Vector2.up/3),
-
-
-
-      Vector2.zero+(Vector2.up/3),
-      Vector2.right+(Vector2.up/3),
-      Vector2.zero+(Vector2.up/3)*2,
-      Vector2.right+(Vector2.up/3)*2
-
-
-    });
-
-    result.SetIndices(new int[] {
-      1, 3, 2, 0,
-      7, 5, 4, 6,
-    }, MeshTopology.Quads, 0);
-
+      carry.AddRange(item);
+      return carry;
+    }).ToArray()
+    ,
+      MeshTopology.Quads, 0
+    );
 
     return result;
   }
@@ -130,21 +137,8 @@ public class boxcelCreator : MonoBehaviour
 
     //mat.SetTexture("_Base", tex);
     mat.mainTexture = tex;
-    
-    
+
+
     return mat;
   }
-}
-
-public class Quad
-{
-  public Vector3 A, B, C, D;
-
-
-
-
-  public int[] toIndexes => new int[]
-  {
-    1,3,2,0
-  };
 }
