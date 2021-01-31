@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
-public struct Triangle
+namespace MeshTool
 {
-  public Vector3 A, B, C;
 
-  public void Draw()
+  public struct TriangleA
   {
-    Debug.DrawLine(A, B);
-    Debug.DrawLine(A, C);
-    Debug.DrawLine(B, C);
+    public Vector3 A, B, C;
+
+    public void Draw()
+    {
+      Debug.DrawLine(A, B);
+      Debug.DrawLine(A, C);
+      Debug.DrawLine(B, C);
+    }
   }
 }
+

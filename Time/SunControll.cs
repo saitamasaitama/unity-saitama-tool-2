@@ -2,6 +2,9 @@
 using System.Collections;
 using System;
 
+
+
+/*
 public class SunControll : MonoBehaviour
 {
   private float r = 0;
@@ -21,3 +24,4 @@ public class SunControll : MonoBehaviour
 
   }
 }
+*/
